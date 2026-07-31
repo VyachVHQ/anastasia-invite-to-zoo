@@ -1,0 +1,15 @@
+# Зависимости
+node_modules/
+
+# Сборка
+.next/
+out/
+
+# Локальные данные
+answer/
+tsconfig.tsbuildinfo
+*.log
+
+# Система
+.DS_Store
+Thumbs.db
