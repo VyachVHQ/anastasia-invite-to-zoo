@@ -65,12 +65,10 @@ export default function MapScreen() {
   const [canDrag, setCanDrag] = useState(true)
   const [ready, setReady] = useState(false)
   const [imgRatio, setImgRatio] = useState(1)
-  const [finishVisible, setFinishVisible] = useState(true)
 
   const containerRef = useRef<HTMLDivElement>(null)
   const imageAreaRef = useRef<HTMLDivElement>(null)
   const imgRatioRef = useRef(1)
-  const finishTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const isDragging = useRef(false)
   const lastPos = useRef({ x: 0, y: 0 })
   const pinchDist = useRef(0)
@@ -151,7 +149,6 @@ export default function MapScreen() {
 
   function handleDragStart(e: React.MouseEvent | React.TouchEvent) {
     if (editMode || !canDrag) return
-    hideFinish()
     const pos = getClientPos(e); if (!pos) return
     isDragging.current = true; lastPos.current = pos
     history.current = [{ ...pos, t: Date.now() }]
@@ -161,7 +158,6 @@ export default function MapScreen() {
 
   function handleDragMove(e: React.MouseEvent | React.TouchEvent) {
     if (editMode || !isDragging.current || !canDrag) return
-    hideFinish()
     const pos = getClientPos(e); if (!pos) return
     const dx = pos.x - lastPos.current.x; const dy = pos.y - lastPos.current.y
     lastPos.current = pos
@@ -195,7 +191,6 @@ export default function MapScreen() {
   function handleWheel(e: WheelEvent) {
     if (editMode) return
     e.preventDefault()
-    hideFinish()
     const c = containerRef.current; if (!c) return
     const rect = c.getBoundingClientRect()
     const mx = e.clientX - rect.left; const my = e.clientY - rect.top
@@ -212,7 +207,6 @@ export default function MapScreen() {
     const handler = (e: WheelEvent) => {
       if (editMode) return
       e.preventDefault()
-      hideFinish()
       const c = containerRef.current; if (!c) return
       const rect = c.getBoundingClientRect()
       const mx = e.clientX - rect.left; const my = e.clientY - rect.top
@@ -243,7 +237,6 @@ export default function MapScreen() {
 
   function handleTouchStart(e: React.TouchEvent) {
     if (editMode) return
-    hideFinish()
     if (e.touches.length === 1) {
       if (!canDrag) return
       isDragging.current = true
@@ -293,12 +286,6 @@ export default function MapScreen() {
     const ratio = img.naturalWidth / img.naturalHeight
     imgRatioRef.current = ratio
     setImgRatio(ratio)
-  }
-
-  function hideFinish() {
-    if (finishTimerRef.current) clearTimeout(finishTimerRef.current)
-    setFinishVisible(false)
-    finishTimerRef.current = setTimeout(() => setFinishVisible(true), 800)
   }
 
   function finishMap() {
@@ -583,12 +570,13 @@ export default function MapScreen() {
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
               transition={{ duration: 0.25, ease: 'easeOut' }}
               onClick={(e) => e.stopPropagation()}
-              className="relative glass rounded-4xl overflow-hidden max-w-lg w-full"
+              className="relative glass rounded-4xl overflow-hidden max-w-lg w-full border-2 border-rose-400/30 shadow-soft-lg"
             >
               <button onClick={() => setSelectedAnimal(null)}
-                className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-base-elevated/80 backdrop-blur-md flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-rose-400/20 transition-colors">
-                <X className="w-4 h-4" />
+                className="absolute top-3 right-3 z-30 w-10 h-10 rounded-full bg-base/90 backdrop-blur-md flex items-center justify-center text-text-primary border border-rose-400/40 shadow-lg hover:bg-rose-500 hover:text-white transition-colors">
+                <X className="w-5 h-5" />
               </button>
+              <div className="overflow-y-auto" style={{ maxHeight: 'min(88vh, 600px)' }}>
               {selectedAnimal.isExhibition ? (
                 <>
                   {selectedAnimal.image ? (
@@ -710,6 +698,7 @@ export default function MapScreen() {
                   </div>
                 </>
               )}
+              </div>
             </motion.div>
           </motion.div>
         )}
@@ -717,7 +706,7 @@ export default function MapScreen() {
 
       <motion.div
         initial={false}
-        animate={{ opacity: finishVisible && !editMode ? 1 : 0, y: finishVisible && !editMode ? 0 : 24 }}
+        animate={{ opacity: editMode ? 0 : 1, y: editMode ? 24 : 0 }}
         transition={{ duration: 0.25 }}
         className="pointer-events-none fixed inset-x-0 bottom-6 z-30 flex justify-center"
       >
