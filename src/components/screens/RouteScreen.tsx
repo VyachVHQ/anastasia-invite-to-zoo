@@ -7,6 +7,7 @@ import { useApp } from '@/context/AppContext'
 import { buildOptimalRoute, buildLongRoute, getRoutePath } from '@/lib/routing'
 import { buildRanking } from '@/lib/ranking'
 import { getEmoji } from '@/lib/emojis'
+import { asset } from '@/lib/asset'
 import animalsData from '@/data/animals.json'
 import type { RouteMode } from '@/types'
 
@@ -195,7 +196,7 @@ export default function RouteScreen() {
             ))}
             {currentPos && (
               <image
-                href="/images/user-icon.png"
+                href={asset('/images/user-icon.png')}
                 x={currentPos.x - 2}
                 y={currentPos.y - 2}
                 width={4}

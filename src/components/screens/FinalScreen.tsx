@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { useApp } from '@/context/AppContext'
 import { collectSubmissionData, submitData } from '@/lib/submitData'
 import { buildReport, sendReport } from '@/lib/report'
+import { asset } from '@/lib/asset'
 
 export default function FinalScreen() {
   const { state, dispatch } = useApp()
@@ -39,7 +40,7 @@ export default function FinalScreen() {
               <span className="text-6xl drop-shadow-glow">{'\u{1F60A}'}</span>
             </div>
             <img
-              src="/images/end_photo.png"
+              src={asset('/images/end_photo.png')}
               alt=""
               className="relative w-full h-full object-cover"
               draggable={false}

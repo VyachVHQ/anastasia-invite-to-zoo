@@ -9,6 +9,7 @@ import exhibitionsData from '@/data/exhibitions.json'
 import markersData from '@/../markers.json'
 import { getEmoji } from '@/lib/emojis'
 import { useImageOrientation } from '@/lib/useImageOrientation'
+import { asset } from '@/lib/asset'
 
 const { animals } = animalsData
 const { exhibitions } = exhibitionsData
@@ -35,9 +36,9 @@ interface DisplayItem {
 
 function resolveMarker(id: string): DisplayItem | null {
   const animal = animals.find((a) => a.id === id)
-  if (animal) return { id: animal.id, name: animal.name, emoji: getEmoji(animal.name), image: animal.image, imageFit: animal.imageFit, category: animal.category, fact: animal.fact, legend: animal.legend }
+  if (animal) return { id: animal.id, name: animal.name, emoji: getEmoji(animal.name), image: asset(animal.image), imageFit: animal.imageFit, category: animal.category, fact: animal.fact, legend: animal.legend }
   const exhibition = exhibitions.find((e) => e.id === id)
-  if (exhibition) return { id: exhibition.id, name: exhibition.name, emoji: exhibition.emoji, image: exhibition.image, category: exhibition.category, fact: exhibition.fact, legend: exhibition.legend, residents: exhibition.residents, isExhibition: true }
+  if (exhibition) return { id: exhibition.id, name: exhibition.name, emoji: exhibition.emoji, image: asset(exhibition.image || ''), category: exhibition.category, fact: exhibition.fact, legend: exhibition.legend, residents: exhibition.residents, isExhibition: true }
   return null
 }
 
@@ -431,7 +432,7 @@ export default function MapScreen() {
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="relative w-full h-0" style={{ paddingBottom: `${100 / imgRatio}%` }}>
               <img
-                src="/images/zoo-map.png"
+                src={asset('/images/zoo-map.png')}
                 alt=""
                 className="absolute inset-0 w-full h-full"
                 draggable={false}

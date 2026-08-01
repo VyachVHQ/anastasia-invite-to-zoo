@@ -7,6 +7,7 @@ import animalsData from '@/data/animals.json'
 import markersData from '@/../markers.json'
 import { getEmoji } from '@/lib/emojis'
 import { useImageOrientation } from '@/lib/useImageOrientation'
+import { asset } from '@/lib/asset'
 import { Heart, X, Sparkles } from 'lucide-react'
 
 export default function LikeScreen() {
@@ -64,7 +65,7 @@ export default function LikeScreen() {
 
   if (!current) return null
 
-  const { orientation, aspectRatio } = useImageOrientation(current.image)
+  const { orientation, aspectRatio } = useImageOrientation(asset(current.image))
   const isPortrait = orientation === 'portrait'
   const imgRatio = aspectRatio ? `${aspectRatio}` : undefined
 
@@ -175,7 +176,7 @@ export default function LikeScreen() {
                         <span className="text-6xl drop-shadow-glow">{getEmoji(current.name)}</span>
                       </div>
                       <img
-                        src={current.image}
+                        src={asset(current.image)}
                         alt={current.name}
                         className="relative w-full h-full object-contain p-4"
                         draggable={false}
