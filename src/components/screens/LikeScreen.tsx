@@ -107,7 +107,7 @@ export default function LikeScreen() {
                     <div className="absolute inset-0 bg-gradient-to-br from-rose-400/25 via-base-card to-base-card" />
                     <div className="absolute inset-0 flex items-center justify-center p-2">
                       <img
-                        src={current.image}
+                        src={asset(current.image)}
                         alt={current.name}
                         className="w-full h-full object-contain"
                         draggable={false}
